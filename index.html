@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="approvedeny">
+  <head>
+    <script src="//cdn.octoblu.com/js/meshblu/latest/meshblu.bundle.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script>
+      var app = angular.module("approvedeny", []);
+      app.controller("hi", function($scope) {
+        conn = meshblu.createConnection({})
+
+        conn.on('ready', function(){
+          conn.device({uuid: 'c6eefa62-260c-418e-9ba2-76846cebe358'}, function(result){
+            $scope.device = result.device
+            $scope.$apply()
+          })
+
+        })
+        $scope.approve = function(device) {
+          var approveMessage = {
+            "devices": [
+              "c6eefa62-260c-418e-9ba2-76846cebe358"
+            ],
+            "payload": {
+              "from": "5de31bf0-c53d-11e5-832d-31f123ed6266"
+            }
+          };
+          conn.message(approveMessage);
+          console.log('approving', device, approveMessage);
+        }
+
+        $scope.deny = function(device) {
+          var denyMessage = {
+            "devices": [
+              "c6eefa62-260c-418e-9ba2-76846cebe358"
+            ],
+            "payload": {
+              "from": "5a9158e0-c53d-11e5-832d-31f123ed6266"
+            }
+          };
+          conn.message(denyMessage);
+          console.log('approving', device, denyMessage);
+        }
+
+      });
+
+    </script>
+    <script>
+
+    </script>
+  </head>
+  <body ng-controller="hi">
+    <div ng-show="device">
+      <button ng-click="approve(device)">Approve</button> <button ng-click="deny(device)">Deny</button>
+    </div>
+  </body>
+</html>
