@@ -5,22 +5,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script>
       var app = angular.module("approvedeny", []);
-      app.controller("hi", function($scope) {
+      app.controller("hi", function($scope, $location) {
+        var id = $location.search().id;        
+
         conn = meshblu.createConnection({})
-
-        conn.on('ready', function(){
-          conn.device({uuid: 'c6eefa62-260c-418e-9ba2-76846cebe358'}, function(result){
-            $scope.device = result.device
-            $scope.$apply()
-          })
-
+        conn.on('ready', function(device){
+          $scope.device = device;
+          $scope.$apply();
         })
+        console.log('got id', id)
         $scope.approve = function(device) {
           var approveMessage = {
             "devices": [
               "c6eefa62-260c-418e-9ba2-76846cebe358"
             ],
             "payload": {
+              "id": id,
               "from": "5de31bf0-c53d-11e5-832d-31f123ed6266"
             }
           };
@@ -29,16 +29,17 @@
         }
 
         $scope.deny = function(device) {
-          var denyMessage = {
+          var approveMessage = {
             "devices": [
               "c6eefa62-260c-418e-9ba2-76846cebe358"
             ],
             "payload": {
-              "from": "5a9158e0-c53d-11e5-832d-31f123ed6266"
+              "id": id,
+              "from": "5de31bf0-c53d-11e5-832d-31f123ed6266"
             }
           };
-          conn.message(denyMessage);
-          console.log('approving', device, denyMessage);
+          conn.message(approveMessage);
+          console.log('approving', device, approveMessage);
         }
 
       });
