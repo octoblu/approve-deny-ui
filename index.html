@@ -6,40 +6,36 @@
     <script>
       var app = angular.module("approvedeny", []);
       app.controller("hi", function($scope, $location) {
-        var id = $location.search().id;        
+        var approveFlowId = $location.search().id;
 
-        conn = meshblu.createConnection({})
+        conn = meshblu.createConnection()
+
+        conn.on('notReady', function(error){
+          console.log('notReady', error)
+        })
+
         conn.on('ready', function(device){
           $scope.device = device;
           $scope.$apply();
         })
-        console.log('got id', id)
+
+        console.log('got id', approveFlowId)
         $scope.approve = function(device) {
           var approveMessage = {
-            "devices": [
-              "c6eefa62-260c-418e-9ba2-76846cebe358"
-            ],
-            "payload": {
-              "id": id,
-              "from": "5de31bf0-c53d-11e5-832d-31f123ed6266"
-            }
+            "devices": [approveFlowId],
+            "payload": { "from": "approve" }
           };
           conn.message(approveMessage);
           console.log('approving', device, approveMessage);
         }
 
         $scope.deny = function(device) {
-          var approveMessage = {
-            "devices": [
-              "c6eefa62-260c-418e-9ba2-76846cebe358"
-            ],
-            "payload": {
-              "id": id,
-              "from": "5de31bf0-c53d-11e5-832d-31f123ed6266"
-            }
+          var denyMessage = {
+            "devices": [approveFlowId],
+            "payload": { "from": "deny" }
           };
-          conn.message(approveMessage);
-          console.log('approving', device, approveMessage);
+          conn.message(denyMessage);
+          console.log('denying', device, denyMessage);
         }
 
       });
