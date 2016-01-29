@@ -11,6 +11,10 @@
 
     <script type="text/javascript">
       var app = angular.module('approve-deny', ['ngMaterial']);
+      app.config(function($mdThemingProvider) {
+        $mdThemingProvider.theme('default').primaryPalette('indigo')
+      });
+
       app.controller("approve-deny-controller", function($scope, $location) {
         var approveFlowId = $location.search().id;
 
@@ -50,10 +54,17 @@
     </script>
   </head>
 
-  <body ng-cloak ng-controller="approve-deny-controller">
-    <div ng-show="device">
-      <md-button class="md-raised" ng-click="approve(device)">Approve</md-button>
-      <md-button class="md-raised" ng-click="deny(device)">Deny</md-button>
+  <body ng-cloak ng-controller="approve-deny-controller" style="background-color:#ddf" layout="column" layout-fill>
+    <div flex layout="column">
+      <div flex="grow"></div>
+      <div flex ng-show="device" layout="row">
+        <div flex></div>
+        <md-button flex="45" class="md-raised md-accent" ng-click="deny(device)"><h1 class="md-display-4">Deny</h1></md-button>
+        <div flex></div>
+        <md-button flex="45" class="md-raised md-primary" ng-click="approve(device)"><h1 class="md-display-4">Approve</h1></md-button>
+        <div flex></div>
+      </div>
+      <div flex="grow"></div>
     </div>
   </body>
 
