@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html ng-app="approvedeny">
+<html ng-app="approve-deny">
   <head>
     <script src="//cdn.octoblu.com/js/meshblu/latest/meshblu.bundle.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-    <script>
-      var app = angular.module("approvedeny", []);
-      app.controller("hi", function($scope, $location) {
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.3/angular-material.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+    <script type="text/javascript">
+      var app = angular.module('approve-deny', ['ngMaterial']);
+      app.controller("approve-deny-controller", function($scope, $location) {
         var approveFlowId = $location.search().id;
 
-        conn = meshblu.createConnection()
+        conn = meshblu.createConnection({})
 
         conn.on('notReady', function(error){
           console.log('notReady', error)
@@ -16,6 +22,7 @@
 
         conn.on('ready', function(device){
           $scope.device = device;
+          console.log('is ready')
           $scope.$apply();
         })
 
@@ -41,13 +48,13 @@
       });
 
     </script>
-    <script>
-
-    </script>
   </head>
-  <body ng-controller="hi">
+
+  <body ng-cloak ng-controller="approve-deny-controller">
     <div ng-show="device">
-      <button ng-click="approve(device)">Approve</button> <button ng-click="deny(device)">Deny</button>
+      <md-button class="md-raised" ng-click="approve(device)">Approve</md-button>
+      <md-button class="md-raised" ng-click="deny(device)">Deny</md-button>
     </div>
   </body>
+
 </html>
