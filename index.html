@@ -8,29 +8,47 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.3/angular-material.min.js"></script>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <style>
+      body, html, .approve-deny-container {
+        width: 100%;
+        height: 100%;
+      }
+      .approve-deny-container, .approve-deny-button-container {
+        display: -webkit-flex;
+        -webkit-align-items: center;
+        -webkit-justify-content: center;
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .approve-deny-container {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+      }
+      .approve-deny-container article {
+        /*font-size: 2em;*/
+      }
+      .approve-deny-button {
+        min-width: 10em;
+        min-height: 5em;
+        font-size: 1em;
+      }
+
+    </style>
     <script type="text/javascript">
       var app = angular.module('approve-deny', ['ngMaterial']);
-      app.config(function($mdThemingProvider) {
-        $mdThemingProvider.theme('default').primaryPalette('indigo')
-      });
 
       app.controller("approve-deny-controller", function($scope, $location) {
         var approveFlowId = $location.search().id;
 
         conn = meshblu.createConnection({})
 
-        conn.on('notReady', function(error){
-          console.log('notReady', error)
-        })
-
         conn.on('ready', function(device){
           $scope.device = device;
-          console.log('is ready')
           $scope.$apply();
         })
 
-        console.log('got id', approveFlowId)
         $scope.approve = function(device) {
           var approveMessage = {
             "devices": [approveFlowId],
@@ -48,23 +66,17 @@
           conn.message(denyMessage);
           console.log('denying', device, denyMessage);
         }
-
       });
 
     </script>
   </head>
 
-  <body ng-cloak ng-controller="approve-deny-controller" style="background-color:#ddf" layout="column" layout-fill>
-    <div flex layout="column">
-      <div flex="grow"></div>
-      <div flex ng-show="device" layout="row">
-        <div flex></div>
-        <md-button flex="45" class="md-raised md-accent" ng-click="deny(device)"><h1 class="md-display-4">Deny</h1></md-button>
-        <div flex></div>
-        <md-button flex="45" class="md-raised md-primary" ng-click="approve(device)"><h1 class="md-display-4">Approve</h1></md-button>
-        <div flex></div>
+  <body ng-cloak ng-controller="approve-deny-controller">
+      <div class="approve-deny-container md-display-3">          
+      <div class="approve-deny-button-container">
+        <md-button class="md-raised md-warn approve-deny-button" ng-click="deny(device)">Deny</md-button>
+        <md-button class="md-raised md-primary approve-deny-button" ng-click="approve(device)">Approve</md-button>
       </div>
-      <div flex="grow"></div>
     </div>
   </body>
 
