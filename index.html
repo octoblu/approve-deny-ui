@@ -41,8 +41,8 @@
 
       app.controller("approve-deny-controller", function($scope, $location) {
         var flow_id     = $location.search().flow;
-        var approval_id = $location.search().id;
-        var email_id    = $location.search().email_id;
+        var approval_id = $location.search().approval_id;
+        var contact_id  = $location.search().contact_id;
 
         conn = meshblu.createConnection({})
 
@@ -57,7 +57,7 @@
             payload: {
               from: "approve",
               approval_id: approval_id,
-              email_id: email_id
+              contact_id: contact_id
              }
           };
           conn.message(approveMessage);
@@ -70,7 +70,7 @@
             "payload": {
               from: "deny",
               approval_id: approval_id,
-              email_id: email_id
+              contact_id: contact_id
             }
           };
           conn.message(denyMessage);
